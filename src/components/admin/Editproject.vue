@@ -138,11 +138,7 @@
 
           <v-spacer></v-spacer>
 
-          <v-btn
-            color="error darken-1"
-            text
-            @click="deleteimage(image)"
-          >
+          <v-btn color="error darken-1" text @click="deleteimage(image)">
             <v-icon left>mdi-delete-outline</v-icon>
             <span right>Delete</span>
           </v-btn>
@@ -299,7 +295,8 @@ export default {
 }
 .my-purple-text {
   color: #6c63ff !important;
-}.center {
+}
+.center {
   margin: 0;
   text-align: center;
   display: block;

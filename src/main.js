@@ -18,8 +18,9 @@ auth.onAuthStateChanged(() => {
       store,
       render: h => h(App),
       created() {
-        this.$store.dispatch("loadProjects");
         this.$store.dispatch("loadBlogs");
+        this.$store.dispatch("loadEmails");
+        this.$store.dispatch("loadProjects");
       }
     }).$mount("#app");
   }

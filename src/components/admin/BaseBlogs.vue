@@ -2,44 +2,35 @@
   <div>
     <v-container grid-list-md>
       <v-list subheader two-line>
-        <!-- <v-subheader>blogs</v-subheader> -->
-        <v-layout row wrap>
-          <v-flex xs12 sm12 md12>
-            <v-text-field
-              rounded
-              v-model="search"
-              persistent-hint
-              hint="For example, fashion or used cotton"
-              prepend-inner-icon="mdi-magnify"
-              autocomplete="off"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-divider></v-divider>
-        <v-list-item
+        <v-card
+        class="hoverable"
+          flat
           v-for="blog in filtered"
           :key="blog.id"
           link
           router
           :to="'/view-blog/' + blog.id"
         >
-          <v-list-item-avatar>
-            <v-avatar size="40">
-              <img :src="blog.image" :alt="blog.title" />
-            </v-avatar>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ blog.title }}</v-list-item-title>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-avatar size="40">
+                <img :src="blog.image" :alt="blog.title" />
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ blog.title }}</v-list-item-title>
 
-            <v-list-item-subtitle>{{ blog.body }}</v-list-item-subtitle>
-            <small>{{ blog.date | date }}</small>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-btn icon router>
-              <v-icon color="grey lighten-1">mdi-post-outline</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
+              <v-list-item-subtitle>{{ blog.body }}</v-list-item-subtitle>
+              <small>{{ blog.date | date }}</small>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn icon router>
+                <v-icon color="grey lighten-1">mdi-post-outline</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+          <v-divider></v-divider>
+        </v-card>
       </v-list>
     </v-container>
 
@@ -78,7 +69,7 @@ export default {
   },
   filters: {
     date(value) {
-      return formatDistanceToNowStrict(new Date(value));
+      return formatDistanceToNowStrict(new Date(value)) + " ago";
     }
   }
 };
@@ -90,5 +81,8 @@ export default {
 }
 .my-purple-text {
   color: #6c63ff !important;
+}
+.hoverable :hover{
+  background-color: rgb(250, 248, 248) !important;
 }
 </style>

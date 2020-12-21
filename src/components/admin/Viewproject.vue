@@ -118,7 +118,7 @@ export default {
         id: this.id
       });
     }
-  },
+  }
 };
 </script>
 

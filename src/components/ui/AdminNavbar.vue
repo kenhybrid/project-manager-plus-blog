@@ -8,7 +8,8 @@
           $route.name == 'create-project' ||
             $route.name == 'view-project' ||
             $route.name == 'create-blog' ||
-            $route.name == 'view-blog'
+            $route.name == 'view-blog' ||
+            $route.name == 'view-email'
         "
         @click="$router.go(-1)"
         ><v-icon>mdi-arrow-left</v-icon></v-btn
@@ -20,6 +21,7 @@
       >
       <v-subheader v-if="$route.name == 'view-project'">VIEW</v-subheader>
       <v-subheader v-if="$route.name == 'view-blog'">VIEW</v-subheader>
+      <v-subheader v-if="$route.name == 'view-email'">VIEW</v-subheader>
       <v-subheader v-if="$route.name == 'create-blog'">NEW BLOG</v-subheader>
       <v-subheader v-if="$route.name == 'projects'"> PROJECTS</v-subheader>
       <v-subheader v-if="$route.name == 'blogs'"> BLOGS</v-subheader>
@@ -29,14 +31,22 @@
       <v-spacer></v-spacer>
       <!-- <v-subheader class="hidden-sm-and-up">Admin</v-subheader> -->
 
-      <v-toolbar-items class="">
-        <v-avatar
-          color="grey lighten-4"
-          size="48"
-          v-if="$route.name == 'dashboard'"
-          ><v-icon>mdi-account</v-icon>
-        </v-avatar>
-      </v-toolbar-items>
+      <v-avatar
+        color="grey lighten-4"
+        size="48"
+        v-if="$route.name == 'dashboard'"
+        ><v-icon>mdi-account</v-icon>
+      </v-avatar>
+      <v-btn
+        icon
+        v-if="
+          $route.name == 'blogs' ||
+            $route.name == 'projects' ||
+            $route.name == 'emails'
+        "
+        @click="$router.go(0)"
+        ><v-icon>mdi-magnify</v-icon></v-btn
+      >
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app color="white">
       <v-list class="top">

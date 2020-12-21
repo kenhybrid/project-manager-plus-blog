@@ -206,6 +206,7 @@ export default {
             console.log("File available at", downloadURL);
             this.image = downloadURL;
             this.uploading = false;
+            this.preview=true
           });
         }
       );
@@ -218,6 +219,9 @@ export default {
         .delete()
         .then(() => {
           console.log("deleted");
+          this.preview=false
+      this.name = "";
+
         })
         .catch(error => {
           console.log(error);

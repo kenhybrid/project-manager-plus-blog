@@ -2,22 +2,15 @@
   <div>
     <!-- mobile -->
     <v-card flat class="hidden-sm-and-up">
-      <v-img :src="blog.image" alt=""></v-img>
       <v-card-actions>
-        <v-subheader class="heading-1">{{ blog.title }}.</v-subheader>
-        <v-spacer></v-spacer>
-        <v-btn icon color="error" class="px-1">
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <div class="px-1 heading-1">{{ blog.likes }}</div>
+        <v-subheader class="heading-1">{{ email.subject }}.</v-subheader>
       </v-card-actions>
       <v-card-text>
         <p>
-          {{ blog.body }}
+          {{ email.body }}
         </p>
-
-        <p>{{ blog.category }}</p>
-        <p>{{ blog.date }}</p>
+        <p>{{ email.email }} || {{ email.name }}</p>
+        <p>{{ email.date }}</p>
       </v-card-text>
     </v-card>
 
@@ -25,32 +18,26 @@
     <v-container grid-list-xs>
       <v-layout row wrap>
         <v-card class="hidden-xs-only" flat>
-          <v-img :src="blog.image" alt=""></v-img>
           <v-card-actions>
-            <h4>{{ blog.title }}.</h4>
-            <v-spacer></v-spacer>
-            <v-btn icon color="error" class="px-1">
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-            <div class="px-1">{{ blog.likes }}</div>
+            <h4>{{ email.subject }}</h4>
           </v-card-actions>
           <v-card-text>
             <p>
-              {{ blog.body }}
+              {{ email.body }}
             </p>
-            <p>{{ blog.category }}</p>
-            <p>{{ blog.date }}</p>
+
+            <p>{{ email.date }}</p>
           </v-card-text>
         </v-card>
       </v-layout>
     </v-container>
 
     <div>
-      <v-btn color="error" @click="dialog = true" fab fixed bottom left
+      <v-btn color="error" @click="dialog = true" fab fixed bottom right
         ><v-icon>mdi-delete-empty-outline</v-icon></v-btn
       >
     </div>
-    <edit :blog="blog" />
+
     <!-- dialog -->
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
@@ -63,7 +50,7 @@
 
           <v-spacer></v-spacer>
 
-          <v-btn color="error darken-1" text @click="deleteimage(blog.image)">
+          <v-btn color="error darken-1" text @click="deleteemail">
             <v-icon left>mdi-delete-outline</v-icon>
             <span right>Delete</span>
           </v-btn>
@@ -73,49 +60,42 @@
     <!-- dialog -->
   </div>
 </template>
-<script>
-import edit from "./Editblog";
 
-import { storage } from "../firebase";
+<script>
 export default {
   props: ["id"],
   data() {
     return {
       dialog: false,
+      status: "read"
     };
   },
-  components: {
-    edit,
-  },
+
   computed: {
-    blog() {
-      return this.$store.getters.blog(this.id);
-    },
+    email() {
+      return this.$store.getters.email(this.id);
+    }
   },
   methods: {
-    deleteimage(image) {
-      const deleteImage = storage.refFromURL(image);
-      deleteImage
-        .delete()
-        .then(() => {
-          console.log("deleted");
-          this.deletepost();
-          this.dialog = false;
-
-          setTimeout(() => {
-            this.$router.push("/blogs");
-          }, 300);
+    deleteemail() {
+      this.$store
+        .dispatch("emailDelete", {
+          id: this.id
         })
-        .catch((error) => {
-          console.log(error);
+        .then(() => {
+          this.dialog = false;
+          setTimeout(() => {
+            this.$router.push("/emails");
+          }, 300);
         });
-    },
-    deletepost() {
-      this.$store.dispatch("blogDelete", {
-        id: this.id,
-      });
-    },
+    }
   },
+  created() {
+    this.$store.dispatch("isRead", {
+      id: this.id,
+      status: this.status
+    });
+  }
 };
 </script>
 
@@ -132,5 +112,12 @@ export default {
 }
 p {
   font-size: 18px !important;
+}
+#create .v-speed-dial {
+  position: absolute;
+}
+
+#create .v-btn--floating {
+  position: relative;
 }
 </style>

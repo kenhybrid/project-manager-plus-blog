@@ -81,6 +81,16 @@ const routes = [
       )
   },
   {
+    path: "/view-email/:id",
+    name: "view-email",
+    props: true,
+    meta: { requiresAuth: true },
+    component: () =>
+      import(
+        /* webpackChunkName: "view-email" */ "../components/admin/Viewemail.vue"
+      )
+  },
+  {
     path: "/settings",
     name: "settings",
     meta: { requiresAuth: true },
@@ -103,6 +113,20 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: " reset-password" */ "../components/auth/Resetpassword.vue"
+      )
+  },
+
+  /*
+  client
+  routes
+  */
+  {
+    path: "/contact",
+    name: "contact",
+    // meta: { requiresGuest: true },
+    component: () =>
+      import(
+        /* webpackChunkName: " contact" */ "../components/client/Contact.vue"
       )
   }
 ];

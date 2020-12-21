@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     projects: [],
-    blogs: []
+    blogs: [],
+    emails: []
   },
   getters: {
     projects(state) {
@@ -29,6 +30,16 @@ export default new Vuex.Store({
           return blog.id === id;
         });
       };
+    },
+    emails(state) {
+      return state.emails;
+    },
+    email(state) {
+      return id => {
+        return state.emails.find(email => {
+          return email.id === id;
+        });
+      };
     }
   },
   /*
@@ -45,8 +56,14 @@ export default new Vuex.Store({
     loadblogs(state, payload) {
       state.blogs = payload;
     },
+    loademails(state, payload) {
+      state.emails = payload;
+    },
     createblog(state, blogdata) {
       state.blogs.push(blogdata);
+    },
+    createemail(state, emaildata) {
+      state.emails.push(emaildata);
     },
     deleteproject(state, payload) {
       var index = state.projects.findIndex(project => {
@@ -59,6 +76,12 @@ export default new Vuex.Store({
         return payload.id == blog.id;
       });
       state.blogs.splice(index, 1);
+    },
+    deletemail(state, payload) {
+      var index = state.emails.findIndex(email => {
+        return payload.id == email.id;
+      });
+      state.emails.splice(index, 1);
     },
     updateproject(state, payload) {
       const project = state.projects.find(project => {
@@ -104,6 +127,14 @@ export default new Vuex.Store({
       }
       if (payload.date) {
         blog.date = payload.date;
+      }
+    },
+    isread(state, payload) {
+      const email = state.emails.find(email => {
+        return email.id === payload.id;
+      });
+      if (payload.status) {
+        email.status = payload.status;
       }
     }
   },
@@ -209,7 +240,7 @@ export default new Vuex.Store({
           console.log("error while deleting");
         });
     },
-    /*blogs
+    /*emails
 
 
     */
@@ -305,6 +336,93 @@ export default new Vuex.Store({
         .update(updateblog)
         .then(() => {
           commit("updateblog", payload);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    /*emails
+
+
+    */
+    loadEmails({ commit }) {
+      db.collection("emails")
+        .orderBy("date", "desc")
+        .get()
+        .then(querySnapshot => {
+          const emails = [];
+          querySnapshot.forEach(doc => {
+            const data = {
+              id: doc.id,
+              subject: doc.data().subject,
+              name: doc.data().name,
+              body: doc.data().body,
+              email: doc.data().email,
+              date: doc.data().date,
+              status: doc.data().status
+            };
+            emails.push(data);
+            console.log(doc.id, " => ", doc.data());
+          });
+          commit("loademails", emails);
+        })
+        .catch(error => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+    emailDelete({ commit }, payload) {
+      db.collection("emails")
+        .doc(payload.id)
+        .delete()
+        .then(() => {
+          console.log("successfully deleted");
+          commit("deletemail", payload);
+        })
+        .catch(() => {
+          console.log("error while deleting");
+        });
+    },
+    createEmail({ commit }, payload) {
+      const email = {
+        email: payload.email,
+        subject: payload.subject,
+        body: payload.body,
+        date: payload.date,
+        name: payload.name,
+        status: payload.status
+      };
+      db.collection("emails")
+        .add(email)
+        .then(doc => {
+          const id = doc.id;
+          console.log("Document successfully written!");
+          console.log(id);
+          const emaildata = {
+            id: id,
+            email: payload.email,
+            subject: payload.subject,
+            body: payload.body,
+            name: payload.name,
+            date: payload.date,
+            status: payload.status
+          };
+          commit("createemail", emaildata);
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
+    },
+    isRead({ commit }, payload) {
+      const updateblog = {};
+      if (payload.status) {
+        updateblog.status = payload.status;
+      }
+
+      db.collection("emails")
+        .doc(payload.id)
+        .update(updateblog)
+        .then(() => {
+          commit("isread", payload);
         })
         .catch(error => {
           console.log(error);
