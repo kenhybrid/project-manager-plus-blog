@@ -2,7 +2,7 @@
   <div>
     <!-- mobile -->
     <v-card flat class="hidden-sm-and-up">
-      <v-img :src="blog.image" alt=""></v-img>
+      <v-img :src="blog.image" alt="" lazy-src="../../assets/spinner.gif"></v-img>
       <v-card-actions>
         <v-subheader class="heading-1">{{ blog.title }}.</v-subheader>
         <v-spacer></v-spacer>
@@ -25,7 +25,7 @@
     <v-container grid-list-xs>
       <v-layout row wrap>
         <v-card class="hidden-xs-only" flat>
-          <v-img :src="blog.image" alt=""></v-img>
+          <v-img :src="blog.image" alt="" lazy-src="../../assets/spinner.gif"></v-img>
           <v-card-actions>
             <h4>{{ blog.title }}.</h4>
             <v-spacer></v-spacer>

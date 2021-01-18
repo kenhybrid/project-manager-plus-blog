@@ -25,7 +25,7 @@
     <v-container grid-list-xs>
       <v-layout row wrap>
         <v-card class="hidden-xs-only" flat>
-          <v-img :src="project.image" alt=""></v-img>
+          <v-img :src="project.image" lazy-src="../../assets/spinner.gif" alt=""></v-img>
           <v-card-actions>
             <h4>{{ project.title }}.</h4>
             <v-spacer></v-spacer>

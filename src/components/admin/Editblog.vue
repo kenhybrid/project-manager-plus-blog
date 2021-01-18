@@ -78,6 +78,7 @@
                     :alt="name"
                     class="preview"
                     @click="deletedialog = true"
+                    lazy-src="../../assets/spinner.gif"
                   ></v-img>
                 </v-flex>
                 <v-flex xs12 sm12 md12 class="mx-2">

@@ -3,7 +3,7 @@
     <v-container grid-list-md>
       <v-list subheader two-line>
         <v-card
-        class="hoverable"
+          class="hoverable"
           flat
           v-for="blog in filtered"
           :key="blog.id"
@@ -14,7 +14,11 @@
           <v-list-item>
             <v-list-item-avatar>
               <v-avatar size="40">
-                <img :src="blog.image" :alt="blog.title" />
+                <v-img
+                  :src="blog.image"
+                  :alt="blog.title"
+                  lazy-src="../../assets/spinner.gif"
+                ></v-img>
               </v-avatar>
             </v-list-item-avatar>
             <v-list-item-content>
@@ -45,7 +49,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 export default {
   data() {
     return {
-      search: ""
+      search: "",
     };
   },
   computed: {
@@ -57,7 +61,7 @@ export default {
         return this.blogs;
       } else {
         let match = this.search.toLowerCase();
-        return this.blogs.filter(blog => {
+        return this.blogs.filter((blog) => {
           return (
             blog.title.toLowerCase().match(match) ||
             blog.category.toLowerCase().match(match) ||
@@ -65,13 +69,13 @@ export default {
           );
         });
       }
-    }
+    },
   },
   filters: {
     date(value) {
       return formatDistanceToNowStrict(new Date(value)) + " ago";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -82,7 +86,7 @@ export default {
 .my-purple-text {
   color: #6c63ff !important;
 }
-.hoverable :hover{
+.hoverable :hover {
   background-color: rgb(250, 248, 248) !important;
 }
 </style>

@@ -77,6 +77,7 @@
                     :src="image"
                     :alt="name"
                     class="preview"
+                    lazy-src="../../assets/spinner.gif"
                     @click="deletedialog = true"
                   ></v-img>
                 </v-flex>

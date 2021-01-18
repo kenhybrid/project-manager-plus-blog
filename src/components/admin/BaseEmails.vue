@@ -93,7 +93,7 @@ export default {
 
 <style scoped>
 .read {
-  background-color: rgb(237, 237, 248) !important;
+  background-color: rgb(243, 242, 248) !important;
 }
 .my-purple {
   background-color: #6c63ff !important;

@@ -11,11 +11,22 @@
             $route.name == 'view-blog' ||
             $route.name == 'view-email'
         "
-        @click="$router.go(-1)"
+        @click="go"
         ><v-icon>mdi-arrow-left</v-icon></v-btn
       >
 
       <v-app-bar-nav-icon v-else @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-btn
+        class="mx-1"
+        icon
+        v-if="
+          $route.name == 'blogs' ||
+            $route.name == 'projects' ||
+            $route.name == 'emails'
+        "
+        @click="search"
+        ><v-icon>mdi-magnify</v-icon></v-btn
+      >
       <v-subheader v-if="$route.name == 'create-project'">
         NEW PROJECT</v-subheader
       >
@@ -23,30 +34,32 @@
       <v-subheader v-if="$route.name == 'view-blog'">VIEW</v-subheader>
       <v-subheader v-if="$route.name == 'view-email'">VIEW</v-subheader>
       <v-subheader v-if="$route.name == 'create-blog'">NEW BLOG</v-subheader>
-      <v-subheader v-if="$route.name == 'projects'"> PROJECTS</v-subheader>
-      <v-subheader v-if="$route.name == 'blogs'"> BLOGS</v-subheader>
       <v-subheader v-if="$route.name == 'dashboard'"> DASHBOARD</v-subheader>
-      <v-subheader v-if="$route.name == 'emails'"> EMAILS</v-subheader>
 
       <v-spacer></v-spacer>
-      <!-- <v-subheader class="hidden-sm-and-up">Admin</v-subheader> -->
+      <v-subheader v-if="$route.name == 'emails'"> EMAILS</v-subheader>
+      <v-subheader v-if="$route.name == 'blogs'"> BLOGS</v-subheader>
+      <v-subheader v-if="$route.name == 'projects'"> PROJECTS</v-subheader>
 
-      <v-avatar
+      <!-- <v-subheader class="hidden-sm-and-up">Admin</v-subheader> -->
+      <v-btn
+        class="mx-1"
+        icon
+        v-if="notification.length >= 1 && $route.name == 'dashboard'"
+        router
+        to="/emails"
+      >
+        <v-badge right color="error" dot>
+          <v-icon>mdi-bell-outline</v-icon>
+        </v-badge>
+      </v-btn>
+      <!-- <v-avatar
+        class="mx-1"
         color="grey lighten-4"
         size="48"
         v-if="$route.name == 'dashboard'"
         ><v-icon>mdi-account</v-icon>
-      </v-avatar>
-      <v-btn
-        icon
-        v-if="
-          $route.name == 'blogs' ||
-            $route.name == 'projects' ||
-            $route.name == 'emails'
-        "
-        @click="$router.go(0)"
-        ><v-icon>mdi-magnify</v-icon></v-btn
-      >
+      </v-avatar> -->
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app color="white">
       <v-list class="top">
@@ -93,26 +106,39 @@ export default {
         {
           icon: "mdi-apps",
           title: "Dashboard",
-          link: "/"
+          link: "/",
         },
         {
           icon: "mdi-folder-cog-outline",
           title: "Projects",
-          link: "/projects"
+          link: "/projects",
         },
         { icon: "mdi-pencil-plus-outline", title: "Blogs", link: "/blogs" },
-        { icon: "mdi-email-outline", title: "Emails", link: "/emails" }
-      ]
+        { icon: "mdi-email-outline", title: "Emails", link: "/emails" },
+      ],
     };
   },
+  computed: {
+    notification() {
+      return this.$store.getters.emailnotification;
+    },
+  },
   methods: {
+    go() {
+      setTimeout(() => {
+        this.$router.go(-1);
+      }, 100);
+    },
     logout() {
       auth.signOut().then(() => {
         this.$router.replace("/home");
         this.$router.go(0);
       });
-    }
-  }
+    },
+    search() {
+      console.log("hdhhdh");
+    },
+  },
 };
 </script>
 

@@ -3,7 +3,7 @@
     <v-container grid-list-xs>
       <v-layout row wrap>
         <v-flex xs12 sm6 md6>
-          <img src="../../assets/person.svg" class="img" />
+          <img src="../../assets/person.svg" class="image" />
         </v-flex>
         <v-flex xs12 sm6 md6>
           <v-container grid-list-xs>
@@ -120,7 +120,7 @@ export default {
   margin-top: 80px;
   margin-bottom: 100px;
 }
-.img {
+.image {
   display: flex;
   margin-top: 60px;
   margin-bottom: 60px;
@@ -131,7 +131,7 @@ export default {
 }
 
 @media screen and (max-width: 1050px) {
-  .img {
+  .image {
     width: 400px;
     margin-top: 160px;
     margin-bottom: 160px;
@@ -139,13 +139,13 @@ export default {
 }
 
 @media screen and (max-width: 900px) {
-  .img {
+  .image {
     width: 300px;
   }
 }
 
 @media screen and (max-width: 570px) {
-  .img {
+  .image {
     display: none;
   }
 

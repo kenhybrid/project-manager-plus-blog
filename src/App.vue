@@ -1,11 +1,11 @@
-<template>
-  <v-app>
+<template >
+  <v-app class="bg">
     <AdminNavbar v-if="isadmin" />
     <ClientNavbar v-else />
 
     <transition :name="transition">
       <v-main>
-        <router-view class=""></router-view>
+        <router-view ></router-view>
       </v-main>
     </transition>
   </v-app>
@@ -45,4 +45,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.bg{
+  background-color:#ECF0F1 !important;
+  min-height: 100vh;
+}
+</style>

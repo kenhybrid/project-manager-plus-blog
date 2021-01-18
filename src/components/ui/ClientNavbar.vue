@@ -4,8 +4,8 @@
       <v-btn
         icon
         class="my-purple"
-        v-if="$route.name == 'reset-password'"
-        @click="$router.go(-1)"
+        v-if="$route.name == 'reset-password' || $route.name == 'view'|| $route.name == 'viewblog'"
+        @click="go"
         ><v-icon>mdi-arrow-left</v-icon></v-btn
       >
 
@@ -14,7 +14,10 @@
         class="hidden-sm-and-up"
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
-      <v-subheader class="hidden-xs-only">Client</v-subheader>
+       <v-subheader v-if="$route.name == 'blogs-view'">BLOGS</v-subheader>
+       <v-subheader v-if="$route.name == 'project-view'">PROJECTS</v-subheader>
+       <v-subheader v-if="$route.name == 'about'">ABOUT</v-subheader>
+       <v-subheader v-if="$route.name == 'contact'">CONTACT US</v-subheader>
       <v-spacer></v-spacer>
       <v-subheader class="hidden-sm-and-up">Client</v-subheader>
 
@@ -25,8 +28,11 @@
         <v-btn tile text router class="text--green" to="/about">
           <span>about</span>
         </v-btn>
-        <v-btn tile text router to="/projects">
+        <v-btn tile text router to="/projects-view">
           <span>projects</span>
+        </v-btn>
+        <v-btn tile text router to="/blogs-view">
+          <span>blogs</span>
         </v-btn>
         <v-btn tile text router to="/contact">
           <span>contact</span>
@@ -48,7 +54,7 @@
           link
           router
           :to="item.link"
-          active-class="primary--text"
+          active-class="my-purple"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -74,20 +80,40 @@ export default {
         {
           icon: "mdi-home-outline",
           title: "Home",
-          link: "/home"
+          link: "/home",
         },
         { icon: "mdi-help-rhombus-outline", title: "About", link: "/about" },
         {
           icon: "mdi-folder-cog-outline",
           title: "Projects",
-          link: "/projects"
+          link: "/projects-view",
+        },{
+          icon: "mdi-post-outline",
+          title: "Blogs",
+          link: "/blogs-view",
         },
         { icon: "mdi-phone-outline", title: "Contact Us", link: "/contact" },
-        { icon: "mdi-cog-outline", title: "Admin", link: "/login" }
-      ]
+        { icon: "mdi-cog-outline", title: "Admin", link: "/login" },
+      ],
     };
-  }
+  },
+  methods: {
+    go() {
+      setTimeout(() => {
+        this.$router.go(-1);
+      }, 100);
+    },
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+.my-purple {
+  color: #6c63ff !important;
+}
+.top {
+  margin-top: -8px !important;
+}
+.top2 {
+  margin-top: -16px !important;
+}</style>

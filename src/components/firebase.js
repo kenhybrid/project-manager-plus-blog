@@ -20,3 +20,4 @@ const auth = firebase.auth();
 const storage = firebase.storage();
 //enable persistence
 export { auth, storage, db };
+

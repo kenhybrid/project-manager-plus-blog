@@ -8,15 +8,15 @@ export default new Vuex.Store({
   state: {
     projects: [],
     blogs: [],
-    emails: []
+    emails: [],
   },
   getters: {
     projects(state) {
       return state.projects;
     },
     project(state) {
-      return id => {
-        return state.projects.find(project => {
+      return (id) => {
+        return state.projects.find((project) => {
           return project.id === id;
         });
       };
@@ -25,8 +25,8 @@ export default new Vuex.Store({
       return state.blogs;
     },
     blog(state) {
-      return id => {
-        return state.blogs.find(blog => {
+      return (id) => {
+        return state.blogs.find((blog) => {
           return blog.id === id;
         });
       };
@@ -35,12 +35,19 @@ export default new Vuex.Store({
       return state.emails;
     },
     email(state) {
-      return id => {
-        return state.emails.find(email => {
+      return (id) => {
+        return state.emails.find((email) => {
           return email.id === id;
         });
       };
-    }
+    },
+    emailnotification(state) {
+      return state.emails.filter((email) => {
+        if (email.status == "unread") {
+          return true;
+        }
+      });
+    },
   },
   /*
    * mutations*
@@ -66,25 +73,33 @@ export default new Vuex.Store({
       state.emails.push(emaildata);
     },
     deleteproject(state, payload) {
-      var index = state.projects.findIndex(project => {
+      var index = state.projects.findIndex((project) => {
         return payload.id == project.id;
       });
       state.projects.splice(index, 1);
     },
     deleteblog(state, payload) {
-      var index = state.blogs.findIndex(blog => {
+      var index = state.blogs.findIndex((blog) => {
         return payload.id == blog.id;
       });
       state.blogs.splice(index, 1);
     },
     deletemail(state, payload) {
-      var index = state.emails.findIndex(email => {
+      var index = state.emails.findIndex((email) => {
         return payload.id == email.id;
       });
       state.emails.splice(index, 1);
     },
+    likedproject(state, payload) {
+      const project = state.projects.find((project) => {
+        return project.id === payload.id;
+      });
+      if (payload.likes) {
+        project.likes = payload.likes;
+      }
+    },
     updateproject(state, payload) {
-      const project = state.projects.find(project => {
+      const project = state.projects.find((project) => {
         return project.id === payload.id;
       });
       if (payload.title) {
@@ -107,7 +122,7 @@ export default new Vuex.Store({
       }
     },
     updateblog(state, payload) {
-      const blog = state.blogs.find(blog => {
+      const blog = state.blogs.find((blog) => {
         return blog.id === payload.id;
       });
       if (payload.title) {
@@ -130,13 +145,13 @@ export default new Vuex.Store({
       }
     },
     isread(state, payload) {
-      const email = state.emails.find(email => {
+      const email = state.emails.find((email) => {
         return email.id === payload.id;
       });
       if (payload.status) {
         email.status = payload.status;
       }
-    }
+    },
   },
   /*
    * actions*
@@ -147,9 +162,9 @@ export default new Vuex.Store({
       db.collection("projects")
         .orderBy("date", "desc")
         .get()
-        .then(querySnapshot => {
+        .then((querySnapshot) => {
           const projects = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const data = {
               id: doc.id,
               title: doc.data().title,
@@ -157,14 +172,14 @@ export default new Vuex.Store({
               category: doc.data().category,
               date: doc.data().date,
               likes: doc.data().likes,
-              image: doc.data().image
+              image: doc.data().image,
             };
             projects.push(data);
             console.log(doc.id, " => ", doc.data());
           });
           commit("loadprojects", projects);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Error getting documents: ", error);
         });
     },
@@ -175,11 +190,11 @@ export default new Vuex.Store({
         description: payload.description,
         date: payload.date,
         likes: payload.likes,
-        image: payload.image
+        image: payload.image,
       };
       db.collection("projects")
         .add(project)
-        .then(doc => {
+        .then((doc) => {
           const id = doc.id;
           console.log("Document successfully written!");
           console.log(id);
@@ -190,12 +205,28 @@ export default new Vuex.Store({
             description: payload.description,
             date: payload.date,
             likes: payload.likes,
-            image: payload.image
+            image: payload.image,
           };
           commit("createproject", projectdata);
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
+        });
+    },
+    like({ commit }, payload) {
+      const likeproject = {};
+      if (payload.likes) {
+        likeproject.likes = payload.likes;
+      }
+      console.log(payload);
+      db.collection("projects")
+        .doc(payload.id)
+        .update(likeproject)
+        .then(() => {
+          commit("likedproject", payload);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
     updateProject({ commit }, payload) {
@@ -224,7 +255,7 @@ export default new Vuex.Store({
         .then(() => {
           commit("updateproject", payload);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -248,9 +279,9 @@ export default new Vuex.Store({
       db.collection("blogs")
         .orderBy("date", "desc")
         .get()
-        .then(querySnapshot => {
+        .then((querySnapshot) => {
           const blogs = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const data = {
               id: doc.id,
               title: doc.data().title,
@@ -258,14 +289,14 @@ export default new Vuex.Store({
               category: doc.data().category,
               date: doc.data().date,
               likes: doc.data().likes,
-              image: doc.data().image
+              image: doc.data().image,
             };
             blogs.push(data);
             console.log(doc.id, " => ", doc.data());
           });
           commit("loadblogs", blogs);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Error getting documents: ", error);
         });
     },
@@ -288,11 +319,11 @@ export default new Vuex.Store({
         body: payload.body,
         date: payload.date,
         likes: payload.likes,
-        image: payload.image
+        image: payload.image,
       };
       db.collection("blogs")
         .add(blog)
-        .then(doc => {
+        .then((doc) => {
           const id = doc.id;
           console.log("Document successfully written!");
           console.log(id);
@@ -303,7 +334,7 @@ export default new Vuex.Store({
             body: payload.body,
             date: payload.date,
             likes: payload.likes,
-            image: payload.image
+            image: payload.image,
           };
           commit("createblog", blogdata);
         })
@@ -337,7 +368,7 @@ export default new Vuex.Store({
         .then(() => {
           commit("updateblog", payload);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -349,9 +380,9 @@ export default new Vuex.Store({
       db.collection("emails")
         .orderBy("date", "desc")
         .get()
-        .then(querySnapshot => {
+        .then((querySnapshot) => {
           const emails = [];
-          querySnapshot.forEach(doc => {
+          querySnapshot.forEach((doc) => {
             const data = {
               id: doc.id,
               subject: doc.data().subject,
@@ -359,14 +390,14 @@ export default new Vuex.Store({
               body: doc.data().body,
               email: doc.data().email,
               date: doc.data().date,
-              status: doc.data().status
+              status: doc.data().status,
             };
             emails.push(data);
             console.log(doc.id, " => ", doc.data());
           });
           commit("loademails", emails);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Error getting documents: ", error);
         });
     },
@@ -389,11 +420,11 @@ export default new Vuex.Store({
         body: payload.body,
         date: payload.date,
         name: payload.name,
-        status: payload.status
+        status: payload.status,
       };
       db.collection("emails")
         .add(email)
-        .then(doc => {
+        .then((doc) => {
           const id = doc.id;
           console.log("Document successfully written!");
           console.log(id);
@@ -404,7 +435,7 @@ export default new Vuex.Store({
             body: payload.body,
             name: payload.name,
             date: payload.date,
-            status: payload.status
+            status: payload.status,
           };
           commit("createemail", emaildata);
         })
@@ -424,9 +455,9 @@ export default new Vuex.Store({
         .then(() => {
           commit("isread", payload);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 });
